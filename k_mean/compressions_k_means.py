@@ -14,8 +14,8 @@ def main():
     k_means_array = get_k_points(image_as_array, k, num_of_rows, num_of_cols)
     # returns an array that maps each pixel point to a specific k-cluster.
     # each index in the array represents the same index in the image array and the value is the cluster.
-    mapping_of_pixels_to_clusters = update_k_means(k_means_array, k, image_as_array, num_of_rows, num_of_cols)
-    compress_image = compressImage(image_as_array,mapping_of_pixels_to_clusters) #returns the compressed image
+    mapping_of_pixels_to_clusters,k_means_array = update_k_means(k_means_array, k, image_as_array, num_of_rows, num_of_cols)
+    compressed_image = compress_image(image_as_array,mapping_of_pixels_to_clusters,k_means_array,num_of_rows,num_of_cols) #returns the compressed image
 
 
 def get_k_points(image, k, num_of_rows, num_of_cols):
@@ -80,8 +80,13 @@ def k_means(k_means_array, k, image_as_array, num_of_rows, num_of_cols, k_means_
     return k_means_index
 
 
-def compress_image(image_as_array, mapping_of_pixels_to_clusters):
-    pass
+def compress_image(image_as_array, mapping_of_pixels_to_clusters, k_means_array, num_of_rows, num_of_cols):
+    image = image_as_array
+    for row in range(0, num_of_rows):
+        for column in range(0, num_of_cols):
+            for rgb_color in range(0, 3):
+                image[row][column][rgb_color] = k_means_array[mapping_of_pixels_to_clusters][rgb_color]
+    return image
 
 
 if __name__ == "__main__":
