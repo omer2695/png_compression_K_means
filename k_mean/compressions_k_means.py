@@ -5,20 +5,17 @@ import random
 
 
 def main():
-    # fff
-    #jkgsdhgsf
     image = Image.open("bird_small.png")
     image_as_array = asarray(image)
     num_of_rows = image_as_array.shape[0]
     num_of_cols = image_as_array.shape[1]
     k = 5
+    # returns an initial array of k random points
     k_means_array = get_k_points(image_as_array, k, num_of_rows, num_of_cols)
-    k_means_array = update_k_means(k_means_array, k, image_as_array, num_of_rows, num_of_cols)
-
-
-    # print(arr)
-    # k_means(k_means_array, k, image_as_array, num_of_rows, num_of_cols)
-
+    # returns an array that maps each pixel point to a specific k-cluster.
+    # each index in the array represents the same index in the image array and the value is the cluster.
+    mapping_of_pixels_to_clusters = update_k_means(k_means_array, k, image_as_array, num_of_rows, num_of_cols)
+    compress_image = compressImage(image_as_array,mapping_of_pixels_to_clusters) #returns the compressed image
 
 
 def get_k_points(image, k, num_of_rows, num_of_cols):
@@ -39,20 +36,21 @@ def distance_from_point_to_mean(x1, y1, z1, x2, y2, z2):
     return dist
 
 
-#def update_k_means(k_means_array, k, image_as_array, num_of_rows, num_of_cols):
-#    number_of_points = (num_of_rows * num_of_cols)
-#    k_means_index = np.zeros(number_of_points)
-#    k_means_index = k_means(k_means_array, k, image_as_array, num_of_rows, num_of_cols, k_means_index)
-#   k_means_index2 = k_means(k_means_array, k, image_as_array, num_of_rows, num_of_cols, k_means_index)
-#    while k_means_index != k_means_index2:
-#        k_means_index = k_means_index2
-#        k_means_index = k_means(k_means_array, k, image_as_array, num_of_rows, num_of_cols, k_means_index)
-#        k_means_index2 = k_means(k_means_array, k, image_as_array, num_of_rows, num_of_cols, k_means_index)
+def update_k_means(k_means_array, k, image_as_array, num_of_rows, num_of_cols):
+    number_of_points = (num_of_rows * num_of_cols)
+    k_means_index = np.zeros(number_of_points)
+    k_means_index = k_means(k_means_array, k, image_as_array, num_of_rows, num_of_cols, k_means_index)
+    k_means_index2 = k_means(k_means_array, k, image_as_array, num_of_rows, num_of_cols, k_means_index)
+    while k_means_index != k_means_index2:
+        k_means_index = k_means_index2
+        k_means_index = k_means(k_means_array, k, image_as_array, num_of_rows, num_of_cols, k_means_index)
+        k_means_index2 = k_means(k_means_array, k, image_as_array, num_of_rows, num_of_cols, k_means_index)
 
 
-#def cluster_average(k):
+def cluster_average(k):
+    print('ff')
 
-#need a fix
+
 def k_means(k_means_array, k, image_as_array, num_of_rows, num_of_cols, k_means_index):
     for i in range(0, num_of_rows * num_of_cols):
         potential_short_distance_between_points = distance_from_point_to_mean(k_means_array[0][0], k_means_array[0][1],
@@ -80,6 +78,10 @@ def k_means(k_means_array, k, image_as_array, num_of_rows, num_of_cols, k_means_
                 k_means_index[i] = j
 
     return k_means_index
+
+
+def compress_image(image_as_array, mapping_of_pixels_to_clusters):
+    pass
 
 
 if __name__ == "__main__":
