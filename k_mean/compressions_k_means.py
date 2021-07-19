@@ -6,6 +6,7 @@ import random
 
 def main():
     # fff
+    #jkgsdhgsf
     image = Image.open("bird_small.png")
     image_as_array = asarray(image)
     num_of_rows = image_as_array.shape[0]
@@ -38,20 +39,20 @@ def distance_from_point_to_mean(x1, y1, z1, x2, y2, z2):
     return dist
 
 
-def update_k_means(k_means_array, k, image_as_array, num_of_rows, num_of_cols):
-    number_of_points = (num_of_rows * num_of_cols)
-    k_means_index = np.zeros(number_of_points)
-    k_means_index = k_means(k_means_array, k, image_as_array, num_of_rows, num_of_cols, k_means_index)
-    k_means_index2 = k_means(k_means_array, k, image_as_array, num_of_rows, num_of_cols, k_means_index)
-    while k_means_index != k_means_index2:
-        k_means_index = k_means_index2
-        k_means_index = k_means(k_means_array, k, image_as_array, num_of_rows, num_of_cols, k_means_index)
-        k_means_index2 = k_means(k_means_array, k, image_as_array, num_of_rows, num_of_cols, k_means_index)
+#def update_k_means(k_means_array, k, image_as_array, num_of_rows, num_of_cols):
+#    number_of_points = (num_of_rows * num_of_cols)
+#    k_means_index = np.zeros(number_of_points)
+#    k_means_index = k_means(k_means_array, k, image_as_array, num_of_rows, num_of_cols, k_means_index)
+#   k_means_index2 = k_means(k_means_array, k, image_as_array, num_of_rows, num_of_cols, k_means_index)
+#    while k_means_index != k_means_index2:
+#        k_means_index = k_means_index2
+#        k_means_index = k_means(k_means_array, k, image_as_array, num_of_rows, num_of_cols, k_means_index)
+#        k_means_index2 = k_means(k_means_array, k, image_as_array, num_of_rows, num_of_cols, k_means_index)
 
 
-def cluster_average(k):
+#def cluster_average(k):
 
-
+#need a fix
 def k_means(k_means_array, k, image_as_array, num_of_rows, num_of_cols, k_means_index):
     for i in range(0, num_of_rows * num_of_cols):
         potential_short_distance_between_points = distance_from_point_to_mean(k_means_array[0][0], k_means_array[0][1],
