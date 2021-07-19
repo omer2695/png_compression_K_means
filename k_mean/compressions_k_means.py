@@ -56,7 +56,6 @@ def k_means(k_means_array, k, image_as_array, num_of_rows, num_of_cols):
 
 
 
-#sdfasdfs
 
 if __name__ == "__main__":
     main()
