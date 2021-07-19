@@ -5,6 +5,7 @@ import random
 
 
 def main():
+    #fff
     image = Image.open("bird_small.png")
     image_as_array = asarray(image)
     num_of_rows = image_as_array.shape[0]
