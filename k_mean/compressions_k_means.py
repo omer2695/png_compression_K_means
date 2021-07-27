@@ -10,9 +10,10 @@ import random
 def main():
     image = Image.open("bird_small.png")
     image_as_array = asarray(image)
+    x = type(image_as_array)
     num_of_rows = image_as_array.shape[0]
     num_of_cols = image_as_array.shape[1]
-    k = 5
+    k = 50
     # returns an initial array of k random points
     k_means_array = get_k_points(image_as_array, k, num_of_rows, num_of_cols)
     # returns an array that maps each pixel point to a specific k-cluster.
@@ -24,7 +25,7 @@ def main():
                                       num_of_cols)  # returns the compressed image
     # saving the compressed image.
     plt.imsave('compressed_' + str(k) +
-               '_colors.png', compressed_image)
+               '_colors.png', np.uint8(compressed_image))
 
 
 def get_k_points(image, k, num_of_rows, num_of_cols):
@@ -123,14 +124,15 @@ def k_means(k_means_array, k, image_as_array, num_of_rows, num_of_cols, k_means_
 
 
 def compress_image(image_as_array, mapping_of_pixels_to_clusters, k_means_array, num_of_rows, num_of_cols):
-    image = image_as_array
+    image = [[[0 for x in range(3)] for y in range(num_of_rows)]for z in range(num_of_cols)]
     for row in range(0, num_of_rows):
         for column in range(0, num_of_cols):
             for rgb_color in range(0, 3):
-                tmp = mapping_of_pixels_to_clusters[row * num_of_cols + column]
-                image[row][column][rgb_color] = k_means_array[tmp][rgb_color]
+                # mapping_of_pixels_to_clusters[row * num_of_cols + column]
+                mapping_of_pixels_to_clusters = np.array(mapping_of_pixels_to_clusters, dtype=np.int)
+                image[row][column][rgb_color] = k_means_array[mapping_of_pixels_to_clusters[row * num_of_cols + column]][rgb_color]
 
-    return image
+    return np.array(image)
 
 
 if __name__ == "__main__":
