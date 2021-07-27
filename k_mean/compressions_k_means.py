@@ -21,7 +21,7 @@ def main():
     mapping_of_pixels_to_clusters, k_means_array = update_k_means(k_means_array, k, image_as_array, num_of_rows,
                                                                   num_of_cols)
 
-    compressed_image = compress_image(image_as_array, mapping_of_pixels_to_clusters, k_means_array, num_of_rows,
+    compressed_image = compress_image(mapping_of_pixels_to_clusters, k_means_array, num_of_rows,
                                       num_of_cols)  # returns the compressed image
     # saving the compressed image.
     plt.imsave('compressed_' + str(k) +
@@ -123,7 +123,7 @@ def k_means(k_means_array, k, image_as_array, num_of_rows, num_of_cols, k_means_
     return k_means_index
 
 
-def compress_image(image_as_array, mapping_of_pixels_to_clusters, k_means_array, num_of_rows, num_of_cols):
+def compress_image(mapping_of_pixels_to_clusters, k_means_array, num_of_rows, num_of_cols):
     image = [[[0 for x in range(3)] for y in range(num_of_rows)]for z in range(num_of_cols)]
     for row in range(0, num_of_rows):
         for column in range(0, num_of_cols):
