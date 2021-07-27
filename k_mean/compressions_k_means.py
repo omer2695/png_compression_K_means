@@ -1,5 +1,8 @@
+from builtins import range
+
 import numpy as np
 from PIL import Image
+from matplotlib import pyplot as plt
 from numpy import asarray
 import random
 
@@ -14,8 +17,14 @@ def main():
     k_means_array = get_k_points(image_as_array, k, num_of_rows, num_of_cols)
     # returns an array that maps each pixel point to a specific k-cluster.
     # each index in the array represents the same index in the image array and the value is the cluster.
-    mapping_of_pixels_to_clusters,k_means_array = update_k_means(k_means_array, k, image_as_array, num_of_rows, num_of_cols)
-    compressed_image = compress_image(image_as_array,mapping_of_pixels_to_clusters,k_means_array,num_of_rows,num_of_cols) #returns the compressed image
+    mapping_of_pixels_to_clusters, k_means_array = update_k_means(k_means_array, k, image_as_array, num_of_rows,
+                                                                  num_of_cols)
+
+    compressed_image = compress_image(image_as_array, mapping_of_pixels_to_clusters, k_means_array, num_of_rows,
+                                      num_of_cols)  # returns the compressed image
+    # saving the compressed image.
+    plt.imsave('compressed_' + str(k) +
+               '_colors.png', compressed_image)
 
 
 def get_k_points(image, k, num_of_rows, num_of_cols):
@@ -38,17 +47,50 @@ def distance_from_point_to_mean(x1, y1, z1, x2, y2, z2):
 
 def update_k_means(k_means_array, k, image_as_array, num_of_rows, num_of_cols):
     number_of_points = (num_of_rows * num_of_cols)
+
     k_means_index = np.zeros(number_of_points)
+
+    k_means_index2 = np.zeros(number_of_points)
+
     k_means_index = k_means(k_means_array, k, image_as_array, num_of_rows, num_of_cols, k_means_index)
-    k_means_index2 = k_means(k_means_array, k, image_as_array, num_of_rows, num_of_cols, k_means_index)
-    while k_means_index != k_means_index2:
-        k_means_index = k_means_index2
-        k_means_index = k_means(k_means_array, k, image_as_array, num_of_rows, num_of_cols, k_means_index)
-        k_means_index2 = k_means(k_means_array, k, image_as_array, num_of_rows, num_of_cols, k_means_index)
+
+    new_k_means_array = cluster_average(k_means_array, k, image_as_array, num_of_rows, num_of_cols, k_means_index)
+
+    k_means_index2 = k_means(new_k_means_array, k, image_as_array, num_of_rows, num_of_cols, k_means_index2)
+    i = 0
+    while i < 10:
+        # while not np.array( k_means_index,k_means_index2) :
+        k_means_index = k_means_index2.copy()
+        new_k_means_array = cluster_average(new_k_means_array, k, image_as_array, num_of_rows, num_of_cols,
+                                            k_means_index)
+        k_means_index2 = k_means(new_k_means_array, k, image_as_array, num_of_rows, num_of_cols, k_means_index2)
+
+        i += 1
+    return k_means_index2, new_k_means_array
 
 
-def cluster_average(k):
-    print('ff')
+def cluster_average(k_means_array, k, image_as_array, num_of_rows, num_of_cols, k_means_index):
+    new_k_means_index = [[0 for x in range(3)] for y in range(k)]
+    number_points_per_cluster = [0 for y in range(k)]
+    for i in range(0, num_of_rows):
+        for j in range(0, num_of_cols):
+            convert_index_3D_to_2D = (i * num_of_rows) + j
+            point_to_cluster_number = int(k_means_index[convert_index_3D_to_2D])
+            new_k_means_index[point_to_cluster_number][0] += image_as_array[i][j][0]
+            new_k_means_index[point_to_cluster_number][1] += image_as_array[i][j][1]
+            new_k_means_index[point_to_cluster_number][2] += image_as_array[i][j][2]
+            number_points_per_cluster[point_to_cluster_number] += 1
+
+    for i in range(0, k):
+        if number_points_per_cluster[i] != 0:
+            new_k_means_index[i][0] = int(new_k_means_index[i][0] / number_points_per_cluster[i])
+            new_k_means_index[i][1] = int(new_k_means_index[i][1] / number_points_per_cluster[i])
+            new_k_means_index[i][2] = int(new_k_means_index[i][2] / number_points_per_cluster[i])
+        else:
+            new_k_means_index[i][0] = random.randrange(0, 255)
+            new_k_means_index[i][1] = random.randrange(0, 255)
+            new_k_means_index[i][2] = random.randrange(0, 255)
+    return new_k_means_index
 
 
 def k_means(k_means_array, k, image_as_array, num_of_rows, num_of_cols, k_means_index):
@@ -85,7 +127,9 @@ def compress_image(image_as_array, mapping_of_pixels_to_clusters, k_means_array,
     for row in range(0, num_of_rows):
         for column in range(0, num_of_cols):
             for rgb_color in range(0, 3):
-                image[row][column][rgb_color] = k_means_array[mapping_of_pixels_to_clusters][rgb_color]
+                tmp = mapping_of_pixels_to_clusters[row * num_of_cols + column]
+                image[row][column][rgb_color] = k_means_array[tmp][rgb_color]
+
     return image
 
 
