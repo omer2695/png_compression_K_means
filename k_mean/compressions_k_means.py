@@ -13,7 +13,7 @@ def main():
     x = type(image_as_array)
     num_of_rows = image_as_array.shape[0]
     num_of_cols = image_as_array.shape[1]
-    k = 50
+    k = 3
     # returns an initial array of k random points
     k_means_array = get_k_points(image_as_array, k, num_of_rows, num_of_cols)
     # returns an array that maps each pixel point to a specific k-cluster.
@@ -60,7 +60,6 @@ def update_k_means(k_means_array, k, image_as_array, num_of_rows, num_of_cols):
     k_means_index2 = k_means(new_k_means_array, k, image_as_array, num_of_rows, num_of_cols, k_means_index2)
     i = 0
     while i < 10:
-        # while not np.array( k_means_index,k_means_index2) :
         k_means_index = k_means_index2.copy()
         new_k_means_array = cluster_average(new_k_means_array, k, image_as_array, num_of_rows, num_of_cols,
                                             k_means_index)
@@ -94,27 +93,28 @@ def cluster_average(k_means_array, k, image_as_array, num_of_rows, num_of_cols, 
     return new_k_means_index
 
 
+#TODO it's something here
 def k_means(k_means_array, k, image_as_array, num_of_rows, num_of_cols, k_means_index):
     for i in range(0, num_of_rows * num_of_cols):
         potential_short_distance_between_points = distance_from_point_to_mean(k_means_array[0][0], k_means_array[0][1],
                                                                               k_means_array[0][2],
                                                                               image_as_array[int(i / num_of_cols)][
-                                                                                  i % k - 1][0],
+                                                                                  (i % num_of_cols) - 1][0],
                                                                               image_as_array[int(i / num_of_cols)][
-                                                                                  i % k - 1][1],
+                                                                                  (i % num_of_cols) - 1][1],
                                                                               image_as_array[int(i / num_of_cols)][
-                                                                                  i % k - 1][2])
+                                                                                  (i % num_of_cols) - 1][2])
 
         for j in range(1, k):
             potential_short_distance_between_points2 = distance_from_point_to_mean(k_means_array[j][0],
                                                                                    k_means_array[j][1],
                                                                                    k_means_array[j][2],
                                                                                    image_as_array[int(i / num_of_cols)][
-                                                                                       i % k - 1][0],
+                                                                                       (i % num_of_cols) - 1][0],
                                                                                    image_as_array[int(i / num_of_cols)][
-                                                                                       i % k - 1][1],
+                                                                                       (i % num_of_cols) - 1][1],
                                                                                    image_as_array[int(i / num_of_cols)][
-                                                                                       i % k - 1][2])
+                                                                                       (i % num_of_cols) - 1][2])
 
             if potential_short_distance_between_points > potential_short_distance_between_points2:
                 potential_short_distance_between_points = potential_short_distance_between_points2
@@ -128,7 +128,6 @@ def compress_image(mapping_of_pixels_to_clusters, k_means_array, num_of_rows, nu
     for row in range(0, num_of_rows):
         for column in range(0, num_of_cols):
             for rgb_color in range(0, 3):
-                # mapping_of_pixels_to_clusters[row * num_of_cols + column]
                 mapping_of_pixels_to_clusters = np.array(mapping_of_pixels_to_clusters, dtype=np.int)
                 image[row][column][rgb_color] = k_means_array[mapping_of_pixels_to_clusters[row * num_of_cols + column]][rgb_color]
 
