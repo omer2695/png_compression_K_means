@@ -8,7 +8,7 @@ import random
 
 
 def main():
-    image = Image.open("bird_small.png")
+    image = Image.open("C:\\Users\\97250\\PycharmProjects\\png_compression_K_means\\k_mean\\bird_small.png")
     image_as_array = asarray(image)
     x = type(image_as_array)
     num_of_rows = image_as_array.shape[0]
