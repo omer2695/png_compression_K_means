@@ -1,21 +1,23 @@
 from tkinter import *
 import easygui
 from PIL import Image, ImageTk
+import compressions_k_means
 
 
 def get_image_path():
     global img_up
+    global image
     # Open file explorer and upload image
     image_path = easygui.fileopenbox()
     image_path = image_path.replace('\\', '\\\\')
-    img2 = Image.open(image_path)
+    image = Image.open(image_path)
     # Check if the image is too big to fit on screen
-    width, height = img2.size
+    width, height = image.size
     if width > 256 or height > 256:
         size = 256, 256
-        img2.thumbnail(size, Image.ANTIALIAS)
+        image.thumbnail(size, Image.ANTIALIAS)
     # Make the image compatible with tkinter
-    img_up = ImageTk.PhotoImage(img2)
+    img_up = ImageTk.PhotoImage(image)
     # Push the image onto its "label"
     image_container['image'] = img_up
     # Make the compress button clickable
@@ -28,6 +30,17 @@ def clear_screen():
     compressed_image['image'] = ""
 
 
+def compress():
+    # send the image to the compression algorithm
+    compressed_image_string = compressions_k_means.compress(image)
+    # Show a waiting bar while the algorithm runs
+
+    # after its returned the name of the saved image as string show it on the screen next to the orig image
+    compressed_image_to_open = Image.open(compressed_image_string)
+    tkimage = ImageTk.PhotoImage(compressed_image_to_open)
+    compressed_image['image'] = tkimage
+
+
 root = Tk()
 root.title('K-Means PNG Compression')
 root.iconbitmap("icon.ico")
@@ -38,7 +51,7 @@ image_container = Label(root)
 compressed_image = Label(root)
 label = Label(root, text="Compress your PNG image with K-means!", font=(None, 20))
 upload_image_button = Button(root, text="Upload an image", command=get_image_path)
-compress_button = Button(root, text="Compress", state=DISABLED)
+compress_button = Button(root, text="Compress", state=DISABLED, command=compress)
 clear_button = Button(root, text="Clear", command=clear_screen)
 exit_button = Button(root, text="Exit", command=root.quit)
 

@@ -1,5 +1,4 @@
 from builtins import range
-
 import numpy as np
 from PIL import Image
 from matplotlib import pyplot as plt
@@ -7,8 +6,8 @@ from numpy import asarray
 import random
 
 
-def main():
-    image = Image.open("C:\\Users\\97250\\PycharmProjects\\png_compression_K_means\\k_mean\\bird_small.png")
+def compress(image):
+    # image = Image.open("C:\\Users\\97250\\PycharmProjects\\png_compression_K_means\\k_mean\\bird_small.png")
     image_as_array = asarray(image)
     x = type(image_as_array)
     num_of_rows = image_as_array.shape[0]
@@ -25,6 +24,7 @@ def main():
                                       num_of_cols)  # returns the compressed image
     # saving the compressed image.
     plt.imsave('compressed_' + str(k) + '_colors.png', np.uint8(compressed_image))
+    return 'compressed_' + str(k) + '_colors.png'
 
 
 def get_k_points(image, k, num_of_rows, num_of_cols):
@@ -130,7 +130,3 @@ def compress_image(mapping_of_pixels_to_clusters, k_means_array, num_of_rows, nu
                 image[row][column][rgb_color] = k_means_array[mapping_of_pixels_to_clusters[row * num_of_cols + column]][rgb_color]
 
     return np.array(image)
-
-
-if __name__ == "__main__":
-    main()
