@@ -32,6 +32,7 @@ def clear_screen():
     compress_button['state'] = DISABLED
     compressed_image['image'] = ""
     progress.stop()
+    # stop open_compressed_image from running
 
 
 def open_compressed_image(compress_image):
@@ -73,6 +74,9 @@ compress_button = Button(root, text="Compress", state=DISABLED, command=compress
 clear_button = Button(root, text="Clear", command=clear_screen)
 exit_button = Button(root, text="Exit", command=root.quit)
 progress = tkinter.ttk.Progressbar(root, orient=HORIZONTAL, length=200, mode='indeterminate')
+loading_label = Label(root, text="Loading...", fg="#2191fb")
+k_means_label = Label(root, text="k-means:")
+k_means_Entry = Entry(root, bd=5)
 
 
 # Size of the screen
@@ -81,13 +85,16 @@ root.geometry("700x700")
 
 # Placing the widgets
 label.place(relx=0.13)
-image_container.place(relx=0.1, rely=0.1)
-compressed_image.place(relx=0.7, rely=0.1)
-upload_image_button.place(relx=0.1, rely=0.9)
-compress_button.place(relx=0.27, rely=0.9)
-clear_button.place(relx=0.38, rely=0.9)
-exit_button.place(relx=0.45, rely=0.9)
-progress.place(relx=0.2, rely=0.7)
+image_container.place(x=100, y=100)
+compressed_image.place(x=500, y=100)
+upload_image_button.place(x=180, y=600)
+compress_button.place(x=330, y=600)
+clear_button.place(x=430, y=600)
+exit_button.place(x=500, y=600)
+loading_label.place(x=300, y=680)
+progress.place(x=250, y=650)
+k_means_label.place(x=240, y=450)
+k_means_Entry.place(x=300, y=450)
 
 
 # Initiate the main loop
