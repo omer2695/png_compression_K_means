@@ -1,6 +1,7 @@
 import time
 import tkinter.ttk
 from tkinter import *
+from tkinter import messagebox
 import easygui
 from PIL import Image, ImageTk
 import compressions_k_means
@@ -52,6 +53,10 @@ def open_compressed_image(compress_image):
 
 
 def compress():
+    if k_means_Entry.get().isnumeric() is False or int(k_means_Entry.get()) < 1 or int(k_means_Entry.get()) > 255:
+        messagebox.showwarning(title="Error", message="K should be an integer between 1 and 255")
+        return 0
+
     result = ["null"]
     global compressed_image_string
     clear_button['state'] = DISABLED
@@ -59,9 +64,8 @@ def compress():
     upload_image_button['state'] = DISABLED
     loading_label['state'] = NORMAL
 
-
     # send the image to the compression algorithm
-    compressed_image_string = threading.Thread(target=compressions_k_means.compress, args=(image, result,))
+    compressed_image_string = threading.Thread(target=compressions_k_means.compress, args=(image, result, int(k_means_Entry.get())))
     compressed_image_string.start()
     # Wait till the thread is finished running , The main thread is stuck
     # after its returned the name of the saved image as string show it on the screen next to the orig image

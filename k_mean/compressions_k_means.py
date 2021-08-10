@@ -6,12 +6,13 @@ from numpy import asarray
 import random
 
 
-def compress(image, result):
+def compress(image, result, k):
     image_as_array = asarray(image)
     x = type(image_as_array)
     num_of_rows = image_as_array.shape[0]
     num_of_cols = image_as_array.shape[1]
-    k = 5
+    if k is None:
+        k = 5
     # returns an initial array of k random points
     k_means_array = get_k_points(image_as_array, k, num_of_rows, num_of_cols)
     # returns an array that maps each pixel point to a specific k-cluster.
