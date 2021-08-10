@@ -6,6 +6,7 @@ from PIL import Image, ImageTk
 import compressions_k_means
 import threading
 
+
 def get_image_path():
     global img_up
     global image
@@ -30,27 +31,29 @@ def clear_screen():
     image_container['image'] = ""
     compress_button['state'] = DISABLED
     compressed_image['image'] = ""
+    progress.stop()
 
 
 def open_compressed_image(compress_image):
-    print("thread 2 has started")
-    progress.start(100)
+    global compressed_image_to_open
+
+    progress.start(300)
     while compressed_image_string.is_alive():
         time.sleep(0.5)
+
     compressed_image_to_open = Image.open(compress_image[0])
     compressed_image_to_open = ImageTk.PhotoImage(compressed_image_to_open)
     compressed_image['image'] = compressed_image_to_open
     progress.stop()
-    print("Thread 2 has stopped")
 
 
 def compress():
-    # send the image to the compression algorithm
     result = ["null"]
     global compressed_image_string
+
+    # send the image to the compression algorithm
     compressed_image_string = threading.Thread(target=compressions_k_means.compress, args=(image, result,))
     compressed_image_string.start()
-    print("Thread has started")
     # Wait till the thread is finished running , The main thread is stuck
     # after its returned the name of the saved image as string show it on the screen next to the orig image
     threading.Thread(target=open_compressed_image, args=(result,)).start()
