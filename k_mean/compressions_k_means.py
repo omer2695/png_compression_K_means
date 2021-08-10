@@ -6,13 +6,13 @@ from numpy import asarray
 import random
 
 
-def compress(image):
+def compress(image, result):
     # image = Image.open("C:\\Users\\97250\\PycharmProjects\\png_compression_K_means\\k_mean\\bird_small.png")
     image_as_array = asarray(image)
     x = type(image_as_array)
     num_of_rows = image_as_array.shape[0]
     num_of_cols = image_as_array.shape[1]
-    k = 3
+    k = 5
     # returns an initial array of k random points
     k_means_array = get_k_points(image_as_array, k, num_of_rows, num_of_cols)
     # returns an array that maps each pixel point to a specific k-cluster.
@@ -24,7 +24,7 @@ def compress(image):
                                       num_of_cols)  # returns the compressed image
     # saving the compressed image.
     plt.imsave('compressed_' + str(k) + '_colors.png', np.uint8(compressed_image))
-    return 'compressed_' + str(k) + '_colors.png'
+    result[0] = 'compressed_' + str(k) + '_colors.png'
 
 
 def get_k_points(image, k, num_of_rows, num_of_cols):
