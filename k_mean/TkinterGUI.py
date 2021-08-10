@@ -46,11 +46,19 @@ def open_compressed_image(compress_image):
     compressed_image_to_open = ImageTk.PhotoImage(compressed_image_to_open)
     compressed_image['image'] = compressed_image_to_open
     progress.stop()
+    clear_button['state'] = NORMAL
+    upload_image_button['state'] = NORMAL
+    loading_label['state'] = DISABLED
 
 
 def compress():
     result = ["null"]
     global compressed_image_string
+    clear_button['state'] = DISABLED
+    compress_button['state'] = DISABLED
+    upload_image_button['state'] = DISABLED
+    loading_label['state'] = NORMAL
+
 
     # send the image to the compression algorithm
     compressed_image_string = threading.Thread(target=compressions_k_means.compress, args=(image, result,))
@@ -74,7 +82,7 @@ compress_button = Button(root, text="Compress", state=DISABLED, command=compress
 clear_button = Button(root, text="Clear", command=clear_screen)
 exit_button = Button(root, text="Exit", command=root.quit)
 progress = tkinter.ttk.Progressbar(root, orient=HORIZONTAL, length=200, mode='indeterminate')
-loading_label = Label(root, text="Loading...", fg="#2191fb")
+loading_label = Label(root, text="Loading...", fg="#2191fb", state=DISABLED)
 k_means_label = Label(root, text="k-means:")
 k_means_Entry = Entry(root, bd=5)
 
