@@ -55,14 +55,11 @@ def open_compressed_image(compress_image):
     progress.stop()
     clear_button['state'] = NORMAL
     upload_image_button['state'] = NORMAL
+    compress_button['state'] = NORMAL
     loading_label['state'] = DISABLED
 
 
 def compress():
-    if k_means_Entry.get().isnumeric() is False or int(k_means_Entry.get()) < 1 or int(k_means_Entry.get()) > 255:
-        messagebox.showwarning(title="Error", message="K should be an integer between 1 and 255")
-        return 0
-
     result = ["null"]
     global compressed_image_string
     clear_button['state'] = DISABLED
@@ -70,9 +67,16 @@ def compress():
     upload_image_button['state'] = DISABLED
     loading_label['state'] = NORMAL
 
-    # send the image to the compression algorithm
-    compressed_image_string = threading.Thread(target=compressions_k_means.compress,
-                                               args=(image, result, int(k_means_Entry.get())))
+    if k_means_Entry.get() != "":
+        if k_means_Entry.get().isnumeric() is False or int(k_means_Entry.get()) < 1 or int(k_means_Entry.get()) > 255:
+            messagebox.showwarning(title="Error", message="K should be an integer between 1 and 255")
+            compressed_image_string = threading.Thread(target=compressions_k_means.compress,
+                                                       args=(image, result, int(k_means_Entry.get())))
+            return 0
+    else:
+        compressed_image_string = threading.Thread(target=compressions_k_means.compress,
+                                                   args=(image, result, None))
+
     compressed_image_string.start()
     # Wait till the thread is finished running , The main thread is stuck
     # after its returned the name of the saved image as string show it on the screen next to the orig image
@@ -87,9 +91,11 @@ def display_stats(image):
     for i in range(0, len(compressed_image_path) - 1):
         if compressed_image_path[i] == '/':
             index = i
-
-    compressed_image_path = compressed_image_path[0:index] + "compressed_" + str(
-        int(k_means_Entry.get())) + "_colors.png"
+    if k_means_Entry.get() == "":
+        compressed_image_path = compressed_image_path[0:index] + "compressed_" + "5_colors.png"
+    else:
+        compressed_image_path = compressed_image_path[0:index] + "compressed_" + str(
+            int(k_means_Entry.get())) + "_colors.png"
 
     image_file_size = os.path.getsize(image.filename)
     image_details = Label(root, text="image size: " + str(image_file_size) + " bytes", bg="#FFFFFF").place(x=300, y=450)
@@ -100,8 +106,6 @@ def display_stats(image):
     compress_ratio = (image_file_size - compressed_image_file_size) / compressed_image_file_size
     compress_ratio_details = Label(root, text="compress ratio: " + str(compress_ratio * 100) + " %",
                                    bg="#FFFFFF").place(x=300, y=490)
-
-
 
 
 root = Tk()
