@@ -10,6 +10,7 @@ import os
 
 
 def get_image_path():
+    clear_screen()
     global img_up
     global image
     # Open file explorer and upload image
@@ -62,6 +63,10 @@ def open_compressed_image(compress_image):
 
 
 def compress():
+    image_details['text'] = ""
+    compressed_image_details['text'] = ""
+    compress_ratio_details['text'] = ""
+    compressed_image['image'] = ""
     result = ["null"]
     global compressed_image_string
     clear_button['state'] = DISABLED
@@ -118,7 +123,7 @@ label = Label(root, text="Compress your PNG image with K-means!", font=(None, 20
 upload_image_button = Button(root, text="Upload an image", command=get_image_path)
 compress_button = Button(root, text="Compress", state=DISABLED, command=compress)
 clear_button = Button(root, text="Clear", command=clear_screen)
-exit_button = Button(root, text="Exit", command=root.quit)
+exit_button = Button(root, text="Exit", command=root.destroy)
 progress = tkinter.ttk.Progressbar(root, orient=HORIZONTAL, length=200, mode='indeterminate')
 loading_label = Label(root, text="loading...", fg="#2191fb")
 k_means_label = Label(root, text="k-means:")
@@ -134,7 +139,7 @@ root.geometry("700x700")
 
 
 image_container.place(x=100, y=100)
-compressed_image.place(x=500, y=100)
+compressed_image.place(x=400, y=100)
 label.place(relx=0.13)
 upload_image_button.place(x=180, y=600)
 compress_button.place(x=330, y=600)
