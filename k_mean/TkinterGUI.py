@@ -58,7 +58,6 @@ def open_compressed_image(compress_image):
     compress_button['state'] = NORMAL
     loading_label['state'] = DISABLED
 
-    # Find out what is image
     display_stats(image)
 
 
