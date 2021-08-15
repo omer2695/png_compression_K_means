@@ -53,6 +53,7 @@ def open_compressed_image(compress_image):
     compressed_image_to_open = Image.open(compress_image[0])
     compressed_image_to_open = ImageTk.PhotoImage(compressed_image_to_open)
     compressed_image['image'] = compressed_image_to_open
+    loading_label['text'] = ""
     progress.stop()
     clear_button['state'] = NORMAL
     upload_image_button['state'] = NORMAL
@@ -63,6 +64,7 @@ def open_compressed_image(compress_image):
 
 
 def compress():
+    loading_label['text'] = "loading..."
     image_details['text'] = ""
     compressed_image_details['text'] = ""
     compress_ratio_details['text'] = ""
@@ -105,11 +107,11 @@ def display_stats(image):
             int(k_means_Entry.get())) + "_colors.png"
 
     image_file_size = os.path.getsize(image.filename)
-    image_details['text'] = "image size: " + str(image_file_size) + " bytes"
+    image_details['text'] = "Image size: " + str(image_file_size) + " bytes"
     compressed_image_file_size = os.path.getsize(compressed_image_path)
-    compressed_image_details['text'] = "compressed image size: " + str(compressed_image_file_size) + " bytes"
+    compressed_image_details['text'] = "Compressed image size: " + str(compressed_image_file_size) + " bytes"
     compress_ratio = (image_file_size - compressed_image_file_size) / compressed_image_file_size
-    compress_ratio_details['text'] = "compress ratio: " + str(compress_ratio * 100) + " %"
+    compress_ratio_details['text'] = "Compress ratio: " + str(int(compress_ratio) * 100) + " %"
 
 
 root = Tk()
@@ -125,7 +127,7 @@ compress_button = Button(root, text="Compress", state=DISABLED, command=compress
 clear_button = Button(root, text="Clear", command=clear_screen)
 exit_button = Button(root, text="Exit", command=root.destroy)
 progress = tkinter.ttk.Progressbar(root, orient=HORIZONTAL, length=200, mode='indeterminate')
-loading_label = Label(root, text="loading...", fg="#2191fb")
+loading_label = Label(root, text="", fg="#2191fb")
 k_means_label = Label(root, text="k-means:")
 k_means_Entry = Entry(root, bd=5)
 stats_label = Label(root, text="Stats:")
